@@ -45,9 +45,9 @@ func _ready():
 	connect("change_started", Callable(self, "_on_change_started"))
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	var cur_scene = get_tree().current_scene
-	_history.add(cur_scene.filename, {})
+	_history.add(cur_scene.scene_file_path, {})
 	# if playing a specific scene
-	if ProjectSettings.get("application/run/main_scene") != cur_scene.filename:
+	if ProjectSettings.get("application/run/main_scene") != cur_scene.scene_file_path:
 		# call pre_start and start method to ensure compatibility with "Play Scene"
 		if cur_scene.has_method("pre_start"):
 			cur_scene.pre_start({})
