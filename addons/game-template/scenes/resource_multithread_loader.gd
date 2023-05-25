@@ -14,22 +14,22 @@ func _ready() -> void:
 
 
 func load_scene(path):
-	var state = thread.start(self, "_thread_load", path)
+	var state = thread.start(Callable(self, "_thread_load").bind(path))
 	if state != OK:
 		print("Error while starting thread: " + str(state))
 
 
 func _thread_load(path):
-	var ril = ResourceLoader.load_interactive(path)
-	stages_amount = ril.get_stage_count()
+	var ril = ResourceLoader.load_threaded_request(path)
+	stages_amount = ril.stage_count
 	var res = null
-
 	while true:
-		emit_signal("resource_stage_loaded", ril.get_stage(), stages_amount)
+		emit_signal("resource_stage_loaded", ril, stages_amount)
 		OS.delay_msec(SIMULATED_DELAY_MS)
-		var err = ril.poll()
+		
+		var err = ril.err
 		if err == ERR_FILE_EOF:
-			res = ril.get_resource()
+			res = ril.get_node_and_resource
 			break
 		elif err != OK:
 			print("There was an error loading")

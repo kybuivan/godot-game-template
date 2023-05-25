@@ -2,8 +2,7 @@ extends Node
 
 
 func file_exists(path) -> bool:
-	var f = File.new()
-	return f.file_exists(path)
+	return FileAccess.file_exists(path)
 
 
 # Reparent a node under a new parent.
